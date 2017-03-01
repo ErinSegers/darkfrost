@@ -3,11 +3,16 @@ var currentlyWidget = new Vue({
   data: {
     location: 'Gainesville, FL',
     time: 1000000,
-    summary: 'Partly cloudy',
-    icon: 'partly-cloudy',
+    summary: 'clear-day',
+    icon: 'clear-day',
     apparentTemperature: 75.4,
     precipProbability: 0.30,
     humidity: 0.45
+  },
+  methods: {
+    iconUrl: function(iconString){
+      return `/images/${iconString}.png`;
+    }
   },
   created: function(){
     axios.get('/weather/29.1,-81.4') //this is the format we created in index.js
