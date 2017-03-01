@@ -30,3 +30,27 @@ var currentlyWidget = new Vue({
         });
   }
 });
+
+var dailyWidget = new Vue({
+  el: '#daily',
+  data: {
+    summary: 'partly-cloudy',
+    icon: 'partly-cloudy'
+  },
+  methods: {
+    iconUrl: function(iconString){
+      return `/images/${iconString}.png`;
+    }
+  },
+  created: function(){
+    axios.get('/weather/29.1,-81.4')
+        .then(function(response){
+          var daily = response.data.daily;
+          dailyWidget.summary = daily.summary;
+          dailyWidget.icon = daily.icon;
+        })
+        .catch(function(err){
+          console.log(err);
+        })
+  }
+})
