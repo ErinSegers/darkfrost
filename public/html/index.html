@@ -8,6 +8,21 @@
     <link rel="stylesheet" href="/css/main.css">
   </head>
   <body>
+    <div id="hourly">
+      <header>
+        <div>
+          {{ summary }}
+        </div>
+        <img :src="getMainIcon()" alt="">
+      </header>
+      <main>
+        <ul>
+          <li v-for='hour in hours'>
+            <img :src="getHourlyIcon(hour.icon)"> - {{ hour.summary }} - {{ hour.apparentTemperature }} - {{ getDate(hour.time) }}
+          </li>
+        </ul>
+      </main>
+    </div>
     <div id="currently">
       <header>
         <div class="">
