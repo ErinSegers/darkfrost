@@ -31,7 +31,7 @@ var hourlyWidget = new Vue ({
             var hourlyData = response.data.hourly;
             this.summary = hourlyData.summary;
             this.icon = hourlyData.icon;
-            this.hours = hourlyData.data
+            this.hours = hourlyData.data;
           }.bind(this))
           .catch(function(err){
             console.log(err);
@@ -66,6 +66,15 @@ var currentlyWidget = new Vue({
   methods: {
     iconUrl: function(iconString){
       return `/images/${iconString}.png`;
+    },
+    getDate: function(seconds){
+      var date = new Date(seconds * 1000);
+      var month = date.getMonth();
+      var year = date.getFullYear();
+      var day = date.getDate();
+      var hour = date.getHours();
+      var minutes = date.getMinutes();
+      return `${hour}:${minutes}`;
     },
     getLocation: function(location){
       var locUrl = `/location/${this.location}`;
@@ -116,6 +125,15 @@ var dailyWidget = new Vue({
   methods: {
     iconUrl: function(iconString){
       return `/images/${iconString}.png`;
+    },
+    getDate: function(seconds){
+      var date = new Date(seconds * 1000);
+      var month = date.getMonth();
+      var year = date.getFullYear();
+      var day = date.getDate();
+      var hour = date.getHours();
+      var minutes = date.getMinutes();
+      return `${month}/${day}/${year} - ${hour}:${minutes}`;
     },
     getWeather: function(lat, lon){
       var url = `/weather/${lat},${lon}`;

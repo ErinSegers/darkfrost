@@ -14,11 +14,12 @@ body {
 }
 
 .font-dk-blue {
-  color: #084572;
+  color: #0b5b97;
 }
 
 .margin {
-  margin: 20px auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .padding-right {
@@ -53,4 +54,14 @@ body {
   -webkit-align-items: center;
   align-items: center;
   justify-content: center;
+}
+
+.container {
+  width: 95%;
+}
+
+.sunTimes {
+  width: 12.5%;
+  float: left;
+  text-align: center;
 }
