@@ -3,7 +3,10 @@ var hourlyWidget = new Vue ({
   data: {
     summary: "It's goin' to rain!",
     icon: 'clear-night',
-    hours: []
+    range: 0,
+    hours: [],
+    latitude: 29.1,
+    longitude: -81.4
   },
   methods: {
     getHourlyIcon: function(iconString){
@@ -18,9 +21,9 @@ var hourlyWidget = new Vue ({
       var minutes = date.getMinutes();
       return `${month + 1}/${day}/${year} ${hour}:${minutes < 9 ? '0' + minutes : minutes}`; //months start counting at 0, so 2 is March
     },
-    getMainIcon: function(){
-      return `/images/${this.icon}.png`;
-    },
+    // getMainIcon: function(){
+    //   return `/images/${this.icon}.png`;
+    // },
     getHourlyWeather: function(lat, lon){
       var url = `/weather/${lat},${lon}`;
       axios.get(url)
@@ -33,6 +36,15 @@ var hourlyWidget = new Vue ({
           .catch(function(err){
             console.log(err);
           });
+    },
+    rangeUp: function(){
+      this.range = this.range + 12;
+    },
+    rangeDown: function(){
+      this.range = this.range - 12;
+    },
+    updateWeather: function(){
+      this.getHourlyWeather(this.latitude, this.longitude);
     }
   },
   created: function(){
@@ -50,6 +62,54 @@ var currentlyWidget = new Vue({
     apparentTemperature: 75.4,
     precipProbability: 0.30,
     humidity: 0.45,
+  },
+  methods: {
+    iconUrl: function(iconString){
+      return `/images/${iconString}.png`;
+    },
+    getLocation: function(location){
+      var locUrl = `/location/${this.location}`;
+      console.log(locUrl);
+      axios.get(locUrl)
+          .then(function(response){
+            var data = response.data.results[0];
+            this.lat = data.geometry.location.lat;
+            this.lon = data.geometry.location.lng;
+            this.getWeather(this.lat, this.lon);
+          }.bind(this))
+          .catch(function(err){
+            console.log(err);
+          })
+    },
+    getWeather: function(lat, lon){
+      var url = `/weather/${lat},${lon}`;
+      console.log(url);
+      axios.get(url)
+          .then(function(response){
+            var data = response.data.currently;
+            this.time = data.time;
+            this.summary = data.summary;
+            this.icon = data.icon;
+            this.apparentTemperature = Math.round(data.apparentTemperature);
+            this.precipProbability = data.precipProbability;
+            this.humidity = data.humidity;
+          }.bind(this))
+          .catch(function(err){
+            console.log(err);
+          });
+    }
+  },
+  created: function(){
+    this.getLocation('Gainesville, FL');
+  }
+});
+
+var dailyWidget = new Vue({
+  el: '#daily',
+  data: {
+    summary: 'partly-cloudy',
+    icon: 'partly-cloudy',
+    sunTimes: [],
     latitude: 29.1,
     longitude: -81.4
   },
@@ -61,17 +121,14 @@ var currentlyWidget = new Vue({
       var url = `/weather/${lat},${lon}`;
       axios.get(url)
           .then(function(response){
-            var data = response.data.currently;
-            currentlyWidget.time = data.time;
-            currentlyWidget.summary = data.summary;
-            currentlyWidget.icon = data.icon;
-            currentlyWidget.apparentTemperature = data.apparentTemperature;
-            currentlyWidget.precipProbability = data.precipProbability;
-            currentlyWidget.humidity = data.humidity;
-          })
+            var daily = response.data.daily;
+            this.summary = daily.summary;
+            this.icon = daily.icon;
+            this.sunTimes = daily.data;
+          }.bind(this))
           .catch(function(err){
             console.log(err);
-          });
+          })
     },
     updateWeather: function(){
       this.getWeather(this.latitude, this.longitude);
@@ -82,26 +139,19 @@ var currentlyWidget = new Vue({
   }
 });
 
-var dailyWidget = new Vue({
-  el: '#daily',
+var minutelyWidget = new Vue({
+  el: '#minutely',
   data: {
-    summary: 'partly-cloudy',
-    icon: 'partly-cloudy'
-  },
-  methods: {
-    iconUrl: function(iconString){
-      return `/images/${iconString}.png`;
-    }
+    summary: 'breezy',
   },
   created: function(){
     axios.get('/weather/29.1,-81.4')
         .then(function(response){
-          var daily = response.data.daily;
-          dailyWidget.summary = daily.summary;
-          dailyWidget.icon = daily.icon;
+          var minutely = response.data.minutely;
+          minutelyWidget.summary = minutely.summary;
         })
         .catch(function(err){
           console.log(err);
         })
   }
-})
+});

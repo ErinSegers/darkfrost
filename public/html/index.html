@@ -5,59 +5,95 @@
     <title>Darkfrost</title>
     <script src="https://unpkg.com/vue"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/main.css">
   </head>
   <body>
-    <div id="hourly">
-      <header>
-        <div>
-          {{ summary }}
-        </div>
-        <img :src="getMainIcon()" alt="">
-      </header>
-      <main>
-        <ul>
-          <li v-for='hour in hours'>
-            <img :src="getHourlyIcon(hour.icon)"> - {{ hour.summary }} - {{ hour.apparentTemperature }} - {{ getDate(hour.time) }}
-          </li>
-        </ul>
-      </main>
-    </div>
-    <div id="currently">
-      <header>
-        <div class="">
-          <input type="text" placeholder='Latitude:' v-model='latitude'>
-          <input type="text" placeholder='Longitude:' v-model='longitude'>
-          <button v-on:click='updateWeather()'>Update Weather</button>
-        </div>
-        <h4>{{ location }}</h4>
-      </header>
-      <main>
-        <div>
-          <h1>{{ apparentTemperature }}</h1>
-        </div>
-        <div>
-          <h2>{{ summary }}</h2>
-          <div>
-            <img :src="iconUrl(icon)" />
+    <div id="background">
+      <div class="row margin" id="currently">
+        <div class="col-xs-10 col-xs-offset-1 col-md-6 col-md-offset-3">
+          <div class="text-center">
+            <input type="text" placeholder='City, State:' v-model='location'>
+            <button v-on:click='getLocation(location)'>Update Current Weather</button>
+          </div>
+          <h4 class="text-center font-white">Current weather for {{ location }}</h4>
+          <div class="row">
+            <div class="col-xs-6">
+              <h1 class="text-center font-white">{{ apparentTemperature }}&deg;</h1>
+              <h2 class="text-center font-dk-blue">{{ summary }}</h2>
+              <h4 class="text-center">{{ precipProbability }}</h4>
+              <h4 class="text-center">{{ humidity }}</h4>
+              <h5 class="text-center">{{ time }}</h5>
+            </div>
+            <div class="col-xs-6">
+              <div class="flex">
+                <img class="img-responsive icon" :src="iconUrl(icon)" width="200" />
+              </div>
+              <div id="minutely">
+                <h4 class="text-center">Minutely: {{ summary }}</h4>
+              </div>
+            </div>
           </div>
         </div>
-        <div>
-          <h3>{{ precipProbability }}</h3>
-          <h3>{{ humidity }}</h3>
+      </div>
+
+    <div id="hourly" class="margin">
+      <div class="row">
+        <div class="col-xs-10 col-xs-offset-1 flex">
+          <h5 class="text-left padding-right">Hourly: {{ summary }}</h5>
+          <img :src="getHourlyIcon(icon)" alt=""  width="200">
+        </div>
+      </div>
+      <main>
+        <div class="row">
+          <div class="col-xs-10 col-xs-offset-1">
+            <div class="text-center margin">
+              <input type="text" placeholder='Latitude:' v-model='latitude'>
+              <input type="text" placeholder='Longitude:' v-model='longitude'>
+              <button v-on:click='updateWeather()'>Update Hourly Weather</button>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div v-for='(hour, index) in hours' v-if='index >= range && index <= range + 11' class="col-xs-2 col-md-1">
+            <img :src="getHourlyIcon(hour.icon)" width="100">
+            <p class="text-center">{{ hour.summary }}</p>
+            <p class="text-center">{{ hour.apparentTemperature }}</p>
+            <p class="text-center">{{ getDate(hour.time) }}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-1">
+            <button v-on:click='rangeDown()' v-if="range >= 12">Previous 12 hours</button>
+          </div>
+          <div class="col-xs-1 col-xs-offset-10">
+            <button v-on:click='rangeUp()'>Next 12 hours</button>
+          </div>
         </div>
       </main>
-      <footer>
-        <h4>{{ time }}</h4>
-      </footer>
     </div>
+  </div>
+
     <div id="daily">
       <main>
-        <div>
-          <h2>{{ summary }}</h2>
+        <div class="text-center">
+          <input type="text" placeholder='Latitude:' v-model='latitude'>
+          <input type="text" placeholder='Longitude:' v-model='longitude'>
+          <button v-on:click='updateWeather()'>Update Daily Weather</button>
         </div>
         <div>
-          <img :src="iconUrl(icon)" />
+          <h2>Daily: {{ summary }}</h2>
+        </div>
+        <div>
+          <img :src="iconUrl(icon)"  width="200" />
+        </div>
+        <div>
+          <ul>
+            <li v-for='sunTime in sunTimes'>
+              {{ sunTime.sunriseTime }} - {{ sunTime.sunsetTime }}
+            </li>
+          </ul>
         </div>
       </main>
     </div>

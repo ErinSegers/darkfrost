@@ -1,1 +1,52 @@
+body {
+  font-family: 'Poiret One', cursive;
+}
 
+#background {
+  background: #59adeb; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(top, #0b5b97 0%, #2a75ae 26%, #7EBCEB 52%, #B3D7F4 75%, #ffffff 99%); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(top, #0b5b97 0%, #2a75ae 26%, #7EBCEB 52%, #B3D7F4 75%, #ffffff 99%); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(top, #0b5b97 0%, #2a75ae 26%, #7EBCEB 52%, #B3D7F4 75%, #ffffff 99%); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to bottom, #0b5b97 0%,#2a75ae 26%,#7EBCEB 52%,#B3D7F4 75%,#ffffff 99%); /* Standard syntax */
+}
+
+.font-white {
+  color: #fff;
+}
+
+.font-dk-blue {
+  color: #084572;
+}
+
+.margin {
+  margin: 20px auto;
+}
+
+.padding-right {
+  padding-right: 15px;
+}
+
+#currently {
+
+}
+
+#currently h1 {
+  font-size: 8em;
+}
+
+#currently .icon {
+  margin-top: 25px;
+}
+
+.flex {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  justify-content: center;
+}
