@@ -10,39 +10,38 @@
     <link rel="stylesheet" href="/css/main.css">
   </head>
   <body>
-    <div id="background">
-      <div class="row margin" id="currently">
-        <div class="col-xs-10 col-xs-offset-1 col-md-6 col-md-offset-3">
-          <div class="text-center">
-            <input type="text" placeholder='City, State:' v-model='location'>
-            <button v-on:click='getLocation(location)'>Update Current Weather</button>
+    <div class="row margin" id="currently">
+      <div class="col-xs-10 col-xs-offset-1 col-md-6 col-md-offset-3">
+        <div class="text-center">
+          <input type="text" placeholder='City, State:' v-model='location'>
+          <button v-on:click='getLocation(location)'>Update Current Weather</button>
+        </div>
+        <h4 class="text-center font-white">Current weather for {{ location }}</h4>
+        <div class="row">
+          <div class="col-xs-6">
+            <h1 class="text-center font-white">{{ apparentTemperature }}&deg;</h1>
+            <h2 class="text-center font-dk-blue">{{ summary }}</h2>
+            <h4 class="text-center">{{ precipProbability }}</h4>
+            <h4 class="text-center">{{ humidity }}</h4>
+            <h5 class="text-center">{{ time }}</h5>
           </div>
-          <h4 class="text-center font-white">Current weather for {{ location }}</h4>
-          <div class="row">
-            <div class="col-xs-6">
-              <h1 class="text-center font-white">{{ apparentTemperature }}&deg;</h1>
-              <h2 class="text-center font-dk-blue">{{ summary }}</h2>
-              <h4 class="text-center">{{ precipProbability }}</h4>
-              <h4 class="text-center">{{ humidity }}</h4>
-              <h5 class="text-center">{{ time }}</h5>
+          <div class="col-xs-6">
+            <div class="flex">
+              <img class="img-responsive icon" :src="iconUrl(icon)" width="200" />
             </div>
-            <div class="col-xs-6">
-              <div class="flex">
-                <img class="img-responsive icon" :src="iconUrl(icon)" width="200" />
-              </div>
-              <div id="minutely">
-                <h4 class="text-center">Minutely: {{ summary }}</h4>
-              </div>
+            <div id="minutely">
+              <h4 class="text-center">Minutely: {{ summary }}</h4>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
     <div id="hourly" class="margin">
       <div class="row">
         <div class="col-xs-10 col-xs-offset-1 flex">
           <h5 class="text-left padding-right">Hourly: {{ summary }}</h5>
-          <img :src="getHourlyIcon(icon)" alt=""  width="200">
+          <img class="img-responsive" :src="getHourlyIcon(icon)" alt="" width="200">
         </div>
       </div>
       <main>
@@ -56,24 +55,29 @@
           </div>
         </div>
         <div class="row">
-          <div v-for='(hour, index) in hours' v-if='index >= range && index <= range + 11' class="col-xs-2 col-md-1">
-            <img :src="getHourlyIcon(hour.icon)" width="100">
-            <p class="text-center">{{ hour.summary }}</p>
-            <p class="text-center">{{ hour.apparentTemperature }}</p>
-            <p class="text-center">{{ getDate(hour.time) }}</p>
+          <div class="col-xs-1 flex">
+            <img class="button" v-on:click='rangeDown()' v-if="range >= 12" src="/images/arrow-left.png" alt="left" width="15" />
           </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-1">
-            <button v-on:click='rangeDown()' v-if="range >= 12">Previous 12 hours</button>
+          <div class="col-xs-10">
+            <div class="row">
+              <div v-for='(hour, index) in hours' v-if='index >= range && index <= range + 11' class="col-xs-3 col-md-1">
+                <img class="img-responsive" :src="getHourlyIcon(hour.icon)" width="100">
+                <div class="row">
+                  <div class="col-xs-12">
+                    <p class="text-center">{{ hour.summary }}</p>
+                    <p class="text-center">{{ hour.apparentTemperature }}</p>
+                    <p class="text-center">{{ getDate(hour.time) }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="col-xs-1 col-xs-offset-10">
-            <button v-on:click='rangeUp()'>Next 12 hours</button>
+          <div class="col-xs-1 flex">
+            <img class="button" v-on:click='rangeUp()' src="/images/arrow-right.png" alt="right" width="15" />
           </div>
         </div>
       </main>
     </div>
-  </div>
 
     <div id="daily">
       <main>
@@ -86,7 +90,7 @@
           <h2>Daily: {{ summary }}</h2>
         </div>
         <div>
-          <img :src="iconUrl(icon)"  width="200" />
+          <img class="img-responsive" :src="iconUrl(icon)"  width="200" />
         </div>
         <div>
           <ul>
