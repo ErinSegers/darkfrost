@@ -1,8 +1,8 @@
 var express = require('express');
 var server = express();
 var port = process.env.PORT || 8080;
-var apiKey = require('./secrets').darkskyAPIKey;
-var googleApiKey = require('./secrets').googleGeoAPIKey;
+var apiKey = process.env.DARK_API || require('./secrets').darkskyAPIKey;
+var googleApiKey = process.env.GOOG_API || require('./secrets').googleGeoAPIKey;
 var axios = require('axios');
 var locationRoot = 'https://maps.googleapis.com/maps/api/geocode/json?address=';
 
